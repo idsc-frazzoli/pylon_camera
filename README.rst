@@ -7,7 +7,7 @@
    :width: 130 %
    :align: center
 
-This package offers many functions of the Basler pylon API inside the ROS-Framwork.
+This package offers many functions of the Basler pylon API inside the ROS-Framwork. This is a forked repo from https://github.com/magazino/pylon_camera . Readme file has been modified.
 
 The package supports Baslers USB 3.0, GigE as well as the DART cameras.
 
@@ -46,13 +46,17 @@ it knows how to resolve this dependency. This can be achieved by executing the f
 
 Then, clone the pylon_camera-pkg, and the camera_control_msgs-pkg and install the pylon SDK in your catkin_ws:
 
-``cd ~/catkin_ws/src/ && git clone https://github.com/magazino/pylon_camera.git && git clone https://github.com/magazino/camera_control_msgs.git``
+``cd ~/catkin_ws/src/ && git clone https://github.com/idsc-frazzoli/pylon_camera.git && git clone https://github.com/magazino/camera_control_msgs.git``
 
 ``rosdep install --from-paths . --ignore-src --rosdistro=$ROS_DISTRO -y``
 
 Build the pylon_camera package as you would build a standard ROS-package unsing p.e.
 
-``cd ~/catkin_ws && catkin_make``
+``cd ~/catkin_ws && catkin build``
+
+Checkout breanch multiCam if you want to use multiple cameras.
+
+TODO Add camera names and configuration files etc.
 
 |
 
