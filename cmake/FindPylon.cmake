@@ -1,6 +1,10 @@
 set(PYLON_ROOT $ENV{PYLON_ROOT})
 if (NOT "${PYLON_ROOT}")
+	#default install folder
     set(PYLON_ROOT "/opt/pylon5")
+    
+    #here you set the install folder if you have installed in non-default location
+    #set(PYLON_ROOT "/home/jelavice/Programs/pylon/pylon5")
 endif()
 
 set(_PYLON_CONFIG "${PYLON_ROOT}/bin/pylon-config")
