@@ -48,14 +48,9 @@ set(
 # addition of lcm stuff
 
 set (lcm_include_dir /usr/local/include/lcm)
-#set (lcm_libraries_dir /usr/local/bin/lcm) there seems to be no libraries
+find_library(LCM   NAMES lcm PATHS /usr/local/lib)
+set(lcm_libraries ${LCM})
 
-
-
-
-
-
-# end of addtiion
 
 
 
@@ -94,6 +89,7 @@ include_directories(
 #add lcm node
 add_executable(ros2lcm_node src/ros_2_lcm/ros_2_lcm_node.cpp)
 target_link_libraries(ros2lcm_node 
+		${lcm_libraries}
 		${PROJECT_NAME}
 		${catkin_LIBRARIES}
      	${Pylon_LIBRARIES}
