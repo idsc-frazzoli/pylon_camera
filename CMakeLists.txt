@@ -44,6 +44,23 @@ set(
      "--extensions=cpp,h,hpp" "--filter=-runtime/references,-readability/todo,-build/include_what_you_use"
 )
 
+
+# addition of lcm stuff
+
+set (lcm_include_dir /usr/local/include/lcm)
+#set (lcm_libraries_dir /usr/local/bin/lcm) there seems to be no libraries
+
+
+
+
+
+
+# end of addtiion
+
+
+
+
+
 roslint_cpp(
     src/${PROJECT_NAME}/binary_exposure_search.cpp
     src/${PROJECT_NAME}/encoding_conversions.cpp
@@ -70,7 +87,19 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${catkin_INCLUDE_DIRS}
     ${Pylon_INCLUDE_DIRS}
+    ${lcm_include_dir}	#added lsm stuff
 )
+
+
+#add lcm node
+add_executable(ros2lcm_node src/ros_2_lcm/ros_2_lcm_node.cpp)
+target_link_libraries(ros2lcm_node 
+		${PROJECT_NAME}
+		${catkin_LIBRARIES}
+     	${Pylon_LIBRARIES}
+)
+
+
 
 # Add library
 add_library(
