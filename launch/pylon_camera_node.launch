@@ -17,7 +17,7 @@
 	<!-- =========================================================== -->
 	<!-- Black and white camera -->
 	<!-- =========================================================== -->
-    <arg name="node_name1" default="BW_camera_node" />
+    <!-- <arg name="node_name1" default="BW_camera_node" />
     <arg name="config_file1" default="$(find pylon_camera)/config/blackNwhite.yaml" />
     <node name="$(arg node_name1)" pkg="pylon_camera" type="pylon_camera_node" output="screen"
           respawn="$(arg respawn)" launch-prefix="$(arg launch_prefix)">
@@ -25,7 +25,7 @@
         <param name="camera_frame" value="$(arg node_name1)" type="string" />
         <rosparam command="load" file="$(arg config_file1)" />
     </node>
-    
+    -->
     
     
     <!-- =========================================================== -->
