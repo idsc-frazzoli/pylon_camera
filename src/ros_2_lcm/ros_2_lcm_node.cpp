@@ -51,8 +51,7 @@ static const std::string OPENCV_WINDOW = "Image window";
      image_pub_ = it_.advertise("/image_converter/output_video", 1);
 
 
-         if(m_lcmPtr->good() == false)
-             throw std::runtime_error("runtime_error");
+
 
 
      cv::namedWindow(OPENCV_WINDOW);
@@ -80,19 +79,20 @@ static const std::string OPENCV_WINDOW = "Image window";
      }
 
 
-
+     if(m_lcmPtr->good() == false)
+         throw std::runtime_error("runtime_error");
 
 
      //convert image and send it
      int8_t ranges[15];
-
      idsc::BinaryBlob image;
 
+     //segfaults if you don't set the size to 0
+     image.data_length = 0;
 
 
+     m_lcmPtr->publish("pylon_camera_lcm", &image);
 
-
-    m_lcmPtr->publish("pylon_camera_lcm", &image);
 
 
      // Update GUI Window
