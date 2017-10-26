@@ -28,6 +28,24 @@ void callback(const sensor_msgs::Image::ConstPtr& msg) {
 
 static const std::string OPENCV_WINDOW = "Image window";
 
+
+void int2charArray(int num, char* array){
+
+    array[0] = num & 0xff;
+    array[1] = (num>>8)  & 0xff;
+    array[2] = (num>>16) & 0xff;
+    array[3] = (num>>24) & 0xff;
+}
+
+void addIntToBlob(int num, idsc::BinaryBlob& blob){
+
+    char a[4];
+    int2charArray(num, a);
+    for (int i=0; i < 4; i++)
+        blob.data.push_back(a[i]);
+
+}
+
 class ImageConverter {
     ros::NodeHandle nh_;
     image_transport::ImageTransport it_;
@@ -61,22 +79,15 @@ public:
             return;
         }
 
-        std::cout << "received image, size is: " << cv_ptr->image.rows << " x " << cv_ptr->image.cols << std::endl;
-        if (cv_ptr->image.depth() == CV_8U)
-            std::cout << "Unsigned char image" << std::endl;
-        std::cout << "Its got: " << cv_ptr->image.channels() << " channels." << std::endl;
 
-        unsigned char *input = (unsigned char*) (cv_ptr->image.data);
-        if (input == NULL)
-            throw std::runtime_error("Schaisse!");
-
-        int rows = cv_ptr->image.cols, cols = cv_ptr->image.rows, step = cv_ptr->image.step;
-
-        std::cout << "Step: " << step << std::endl;
-
-        std::cout << "input: " << (int) input[0] << std::endl;
-
-        std::cout << "MEmory is : " << cv_ptr->image.isContinuous() << std::endl;
+        //TODO distinguidh different cases depending on the image format
+//        std::cout << "received image, size is: " << cv_ptr->image.rows << " x " << cv_ptr->image.cols << std::endl;
+//        if (cv_ptr->image.depth() == CV_8U)
+//            std::cout << "Unsigned char image" << std::endl;
+//        std::cout << "Its got: " << cv_ptr->image.channels() << " channels." << std::endl;
+//        std::cout << "Step: " << step << std::endl;
+//        std::cout << "input: " << (int) input[0] << std::endl;
+//        std::cout << "MEmory is : " << cv_ptr->image.isContinuous() << std::endl;
 
         if (m_lcmPtr->good() == false)
             throw std::runtime_error("runtime_error");
@@ -89,10 +100,25 @@ public:
         else
             sizeInBytes = cv_ptr->image.step[0] * cv_ptr->image.rows;
 
-        std::cout << "Size in bytes: " << sizeInBytes << std::endl;
+        //std::cout << "Size in bytes: " << sizeInBytes << std::endl;
 
         idsc::BinaryBlob image;
-        image.data_length = sizeInBytes; //segfaults if you don't set the size to 0
+
+        int headerSizeInBytes = 16;
+
+        int rows = cv_ptr->image.rows;
+        int cols = cv_ptr->image.cols;
+        int channels = 3;
+        int type = 0; //TODO make this better
+        image.data_length = sizeInBytes + headerSizeInBytes; //segfaults if you don't set the size to 0
+
+        addIntToBlob(rows, image);
+        addIntToBlob(cols, image);
+        addIntToBlob(channels, image);
+        addIntToBlob(type, image);
+
+
+
         cv::MatIterator_<cv::Vec3b> it, end;
         for (it = cv_ptr->image.begin<cv::Vec3b>(), end = cv_ptr->image.end<cv::Vec3b>(); it != end; ++it) {
             unsigned char g = (*it)[0];
@@ -102,7 +128,7 @@ public:
             image.data.push_back(g);
             image.data.push_back(r);
         }
-        std::cout << "Vector size: " << image.data.size() << std::endl;
+        //std::cout << "Vector size: " << image.data.size() << std::endl;
         m_lcmPtr->publish("pylon_camera_lcm", &image);
 
         // Update GUI Window
