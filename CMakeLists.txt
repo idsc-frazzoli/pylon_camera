@@ -29,6 +29,9 @@ find_package(
      #std_srvs
      roslint
 )
+#find open cv
+find_package( OpenCV REQUIRED)
+
 
 catkin_package(
     INCLUDE_DIRS
@@ -50,6 +53,7 @@ set(
 set (lcm_include_dir /usr/local/include/lcm)
 find_library(LCM   NAMES lcm PATHS /usr/local/lib)
 set(lcm_libraries ${LCM})
+
 
 
 
@@ -82,7 +86,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${catkin_INCLUDE_DIRS}
     ${Pylon_INCLUDE_DIRS}
-    ${lcm_include_dir}	#added lsm stuff
+    ${lcm_include_dir}	#added lcm stuff
 )
 
 
@@ -93,8 +97,16 @@ target_link_libraries(ros2lcm_node
 		${PROJECT_NAME}
 		${catkin_LIBRARIES}
      	${Pylon_LIBRARIES}
+     	${OpenCV_INCLUDE_DIRS}
 )
-
+include_directories(  )
+add_executable(lcm_decoder_node src/ros_2_lcm/lcm_decoder_node.cpp)
+target_link_libraries(lcm_decoder_node 
+		${lcm_libraries}
+		${PROJECT_NAME}
+		${OpenCV_LIBS}
+     	${Pylon_LIBRARIES}
+)
 
 
 # Add library

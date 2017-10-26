@@ -35,6 +35,9 @@ void int2charArray(int num, char* array){
     array[1] = (num>>8)  & 0xff;
     array[2] = (num>>16) & 0xff;
     array[3] = (num>>24) & 0xff;
+
+//    std::cout << "int value in bits: " << std::bitset<32>(num) <<"   vs: chars stacked up: " << std::bitset<8>(array[3])
+//            << std::bitset<8>(array[2]) << std::bitset<8>(array[1]) << std::bitset<8>(array[0]) << std::endl;
 }
 
 void addIntToBlob(int num, idsc::BinaryBlob& blob){
@@ -60,11 +63,12 @@ public:
         image_sub_ = it_.subscribe("/color_camera_node/image_raw", 1, &ImageConverter::imageCb, this);
         image_pub_ = it_.advertise("/image_converter/output_video", 1);
 
-        cv::namedWindow(OPENCV_WINDOW);
+        //cv::namedWindow(OPENCV_WINDOW);
+        std::cout << "Initialized." << std::endl;
     }
 
     ~ImageConverter() {
-        cv::destroyWindow(OPENCV_WINDOW);
+        //cv::destroyWindow(OPENCV_WINDOW);
     }
 
     void imageCb(const sensor_msgs::ImageConstPtr& msg) {
@@ -124,19 +128,20 @@ public:
             unsigned char g = (*it)[0];
             unsigned char r = (*it)[1];
             unsigned char b = (*it)[2];
-            image.data.push_back(b);
             image.data.push_back(g);
             image.data.push_back(r);
+            image.data.push_back(b);
         }
         //std::cout << "Vector size: " << image.data.size() << std::endl;
         m_lcmPtr->publish("pylon_camera_lcm", &image);
 
         // Update GUI Window
-        cv::imshow(OPENCV_WINDOW, cv_ptr->image);
-        cv::waitKey(3);
+//        cv::imshow(OPENCV_WINDOW, cv_ptr->image);
+//        cv::waitKey(3);
 
         // Output modified video stream
         //image_pub_.publish(cv_ptr->toImageMsg());
+        std::cout << "Published" <<std::endl;
     }
 };
 
