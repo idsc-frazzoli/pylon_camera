@@ -42,6 +42,15 @@ void RosToLcm::imageCallBack(const sensor_msgs::ImageConstPtr& msg) {
     int encoding = cv_ptr->image.depth();
     image.data_length = sizeInBytes + headerSizeInBytes; //segfaults if you don't set the size to 0
 
+
+#ifdef DEBUG
+    std::cout << "Number of rows: " << rows << std::endl;
+    std::cout << "NUmber of cols: " << cols << std::endl;
+    std::cout << "Type of matrix element: " <<  encoding << std::endl;
+    std::cout << "Number of  channels: " << channels << std::endl;
+#endif
+
+
     // make the header so that we can decode it
     addIntToBlob(rows, image);
     addIntToBlob(cols, image);
@@ -49,6 +58,7 @@ void RosToLcm::imageCallBack(const sensor_msgs::ImageConstPtr& msg) {
     addIntToBlob(encoding, image);
 
     cv::MatConstIterator_<cv::Vec3b> it, end;
+    //TODO make this work for any data type
     for (it = cv_ptr->image.begin<cv::Vec3b>(), end = cv_ptr->image.end<cv::Vec3b>(); it != end; ++it) {
         unsigned char g = (*it)[0];
         unsigned char r = (*it)[1];
@@ -58,7 +68,7 @@ void RosToLcm::imageCallBack(const sensor_msgs::ImageConstPtr& msg) {
         image.data.push_back(b);
     }
 
-    m_lcmPtr->publish("pylon_camera_lcm", &image);
+    m_lcmPtr->publish(m_lcm_topic, &image);
 
     // Update GUI Window
 #ifdef VISUALIZATION

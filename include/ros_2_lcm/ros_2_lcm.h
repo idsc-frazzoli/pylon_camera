@@ -36,7 +36,7 @@
 namespace ros2lcm {
 
 
-//#define DEBUG
+#define DEBUG
 #define VISUALIZATION
 static const std::string OPENCV_WINDOW = "Image window";
 
@@ -44,10 +44,8 @@ class RosToLcm {
 
 public:
 
-    RosToLcm(): m_it(m_nh) {std::cout << "Default constructor! " << std::endl;}
-
-    RosToLcm(const std::string& topic_name) :
-            m_it(m_nh), m_lcmPtr(new lcm::LCM()) {
+    RosToLcm(const std::string& topic_name, const std::string& lcm_topic_name) :
+            m_it(m_nh), m_lcm_topic(lcm_topic_name), m_lcmPtr(new lcm::LCM()) {
 
         // Subscribe to input video feed and publish output video feed
         m_image_sub = m_it.subscribe(topic_name, 1, &RosToLcm::imageCallBack, this);
@@ -76,6 +74,7 @@ private:
     image_transport::ImageTransport m_it;
     image_transport::Subscriber m_image_sub;
     std::unique_ptr<lcm::LCM> m_lcmPtr;
+    std::string m_lcm_topic;
 
 };
 

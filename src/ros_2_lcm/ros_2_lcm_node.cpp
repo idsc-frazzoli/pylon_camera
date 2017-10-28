@@ -15,8 +15,9 @@
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "ros_2_lcm");
-    std::string topic_name = std::string(argv[1]);
-    ros2lcm::RosToLcm rosToLcm(topic_name);
+    std::string rosTopicName = std::string(argv[1]);
+    std::string lcmTopicName = std::string(argv[2]);
+    ros2lcm::RosToLcm rosToLcm(rosTopicName, lcmTopicName);
     ros::spin();
     return 0;
 }
