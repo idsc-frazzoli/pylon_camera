@@ -9,12 +9,11 @@
 #include <iostream>
 #include <memory>
 #include <lcm/lcm-cpp.hpp>
-#include "BinaryBlob.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
 
-#include "BinaryBlob.hpp"
+#include "ros_2_lcm/BinaryBlob.hpp"
 
 //TODO move this as a separate node
 
@@ -75,13 +74,13 @@ public:
         int rows = popIntFromBlob(msg);
         int cols = popIntFromBlob(msg);
         int channels = popIntFromBlob(msg);;
-        int type = popIntFromBlob(msg);; //TODO make this better
+        int encoding = popIntFromBlob(msg);; //TODO make this better
 
 
         std::cout << "Num rows: " << rows << std::endl;
         std::cout << "Num cols: " << cols << std::endl;
         std::cout << "Num channels: " << channels << std::endl;
-        std::cout << "Num type: " << type << std::endl;
+        std::cout << "Num type: " << encoding << std::endl;
 
 
         cv::Mat image(rows,cols, CV_8UC3); //TODO hella magic number
