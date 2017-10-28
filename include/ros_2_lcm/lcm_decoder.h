@@ -12,30 +12,30 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-
 #include "ros_2_lcm/BinaryBlob.hpp"
 
 //TODO move this as a separate node
 
+#define DEBUG
 #define VISUALIZATION
 static const std::string OPENCV_WINDOW = "Image window";
 
-
 class LcmImageDecoder {
 
-    int popIntFromBlob(const idsc::BinaryBlob& blob);
-
-    void resetCurrentIndex() {m_currentIndex = 0;}
-
-    int m_currentIndex = 0;
-
 public:
-    LcmImageDecoder() {
+    LcmImageDecoder(const std::string& lcmTopicName) :
+            m_currentIndex(0), m_lcmPtr(new lcm::LCM()) {
+
+        if (m_lcmPtr == false || m_lcmPtr->good() == false)
+            throw std::runtime_error("Lcm creation failed");
+
+        lcm.subscribe(lcmTopicName, &LcmImageDecoder::handleMessage, this);
+
 
 #ifdef VISUALIZATION
         cv::namedWindow(OPENCV_WINDOW);
 #endif
-        std::cout << "Initialized." << std::endl;
+        std::cout << "LCM decoder node nitialized." << std::endl;
     }
 
     ~LcmImageDecoder() {
@@ -45,46 +45,19 @@ public:
 #endif
     }
 
+    void handleMessage(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const idsc::BinaryBlob* msg);
+
     void decodeImage(const idsc::BinaryBlob& msg);
+
+    void listen() { while (0 == m_lcmPtr->handle());}
+
+private:
+    int popIntFromBlob(const idsc::BinaryBlob& blob);
+
+    void resetCurrentIndex() { m_currentIndex = 0; }
+
+    int m_currentIndex;
+    std::unique_ptr<lcm::LCM> m_lcmPtr;
 };
-
-class Handler
-{
-    ImageDecoder m_imgDecoder;
-    public:
-
-        Handler() {
-            lcm::LCM lcm;
-
-               if(!lcm.good())
-                   return 1;
-
-               Handler handlerObject;
-               lcm.subscribe("pylon_camera_lcm", &Handler::handleMessage, &handlerObject);
-
-               std::cout << "Registered." << std::endl;
-
-               while(0 == lcm.handle());
-        }
-        ~Handler() {}
-
-        void handleMessage(const lcm::ReceiveBuffer* rbuf,
-                const std::string& chan,
-                const idsc::BinaryBlob* msg)
-        {
-
-            m_imgDecoder.decodeImage(*msg);
-            std::cout << "Binary blob received! " << std::endl;
-            std::cout << "Binary blob size: " << msg->data.size() << std::endl;
-        }
-
-    private:
-
-
-};
-
-
-
-
 
 #endif /* LCM_DECODER_H_ */

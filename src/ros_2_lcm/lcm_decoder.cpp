@@ -71,3 +71,12 @@ int LcmImageDecoder::popIntFromBlob(const idsc::BinaryBlob& blob) {
 
     return retVal;
 }
+
+void LcmImageDecoder::handleMessage(const lcm::ReceiveBuffer* rbuf, const std::string& chan, const idsc::BinaryBlob* msg) {
+
+        decodeImage(*msg);
+#ifdef DEBUG
+        std::cout << "Binary blob received! " << std::endl;
+        std::cout << "Binary blob size: " << msg->data.size() << std::endl;
+#endif
+    }
