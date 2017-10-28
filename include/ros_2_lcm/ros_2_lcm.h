@@ -36,7 +36,7 @@
 namespace ros2lcm {
 
 
-#define DEBUG
+//#define DEBUG
 #define VISUALIZATION
 static const std::string OPENCV_WINDOW = "Image window";
 

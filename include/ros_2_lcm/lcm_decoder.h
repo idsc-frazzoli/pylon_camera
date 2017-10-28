@@ -18,7 +18,7 @@
 
 //TODO move this in a separate package
 
-#define DEBUG
+//#define DEBUG
 #define VISUALIZATION
 static const std::string OPENCV_WINDOW = "Image window";
 

@@ -9,14 +9,21 @@
 
 namespace ros2lcm {
 
-
 void RosToLcm::imageCallBack(const sensor_msgs::ImageConstPtr& msg) {
 
-    //cv_bridge::CvImagePtr cv_ptr;
+#ifndef VISUALIZATION
+    cv_bridge::CvImagePtr cv_ptr;
+#else
     cv_bridge::CvImageConstPtr cv_ptr;
+#endif
+
     try {
-        //cv_ptr = cv_bridge::toCvCopy(msg,"");
+
+#ifndef VISUALIZATION
+        cv_ptr = cv_bridge::toCvCopy(msg,"");
+#else
         cv_ptr = cv_bridge::cvtColorForDisplay(cv_bridge::toCvShare(msg), "");
+#endif
 
     } catch (cv_bridge::Exception& e) {
         ROS_ERROR("cv_bridge exception: %s", e.what());
@@ -42,14 +49,12 @@ void RosToLcm::imageCallBack(const sensor_msgs::ImageConstPtr& msg) {
     int encoding = cv_ptr->image.depth();
     image.data_length = sizeInBytes + headerSizeInBytes; //segfaults if you don't set the size to 0
 
-
 #ifdef DEBUG
     std::cout << "Number of rows: " << rows << std::endl;
     std::cout << "NUmber of cols: " << cols << std::endl;
-    std::cout << "Type of matrix element: " <<  encoding << std::endl;
+    std::cout << "Type of matrix element: " << encoding << std::endl;
     std::cout << "Number of  channels: " << channels << std::endl;
 #endif
-
 
     // make the header so that we can decode it
     addIntToBlob(rows, image);
@@ -86,7 +91,7 @@ void RosToLcm::int2charArray(int num, char* array) {
 
 #ifdef DEBUG
     std::cout << "int value in bits: " << std::bitset<32>(num) <<"   vs: chars stacked up: " << std::bitset<8>(array[3])
-            << std::bitset<8>(array[2]) << std::bitset<8>(array[1]) << std::bitset<8>(array[0]) << std::endl;
+    << std::bitset<8>(array[2]) << std::bitset<8>(array[1]) << std::bitset<8>(array[0]) << std::endl;
 #endif
 
 }
@@ -99,8 +104,6 @@ void RosToLcm::addIntToBlob(int num, idsc::BinaryBlob& blob) {
         blob.data.push_back(a[i]);
 
 }
-
-
 
 } /* ros2lcm */
 
