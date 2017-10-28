@@ -42,10 +42,8 @@ void LcmImageDecoder::decodeImage(const idsc::BinaryBlob& msg) {
 #ifdef VISUALIZATION
     cv::imshow(OPENCV_WINDOW, image);
     cv::waitKey(3);
-
-    // Output modified video stream
-    //image_pub_.publish(cv_ptr->toImageMsg());
 #endif
+
     resetCurrentIndex();
 }
 

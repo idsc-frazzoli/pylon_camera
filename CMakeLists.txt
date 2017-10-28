@@ -92,6 +92,7 @@ include_directories(
 
 #add lcm node
 add_library(ros2lcm src/ros_2_lcm/ros_2_lcm.cpp)
+add_library(lcmDecoder src/ros_2_lcm/lcm_decoder.cpp)
 
 add_executable(ros2lcm_node src/ros_2_lcm/ros_2_lcm_node.cpp)
 target_link_libraries(ros2lcm_node
@@ -101,9 +102,11 @@ target_link_libraries(ros2lcm_node
 		${catkin_LIBRARIES}
      	${Pylon_LIBRARIES}
      	${OpenCV_INCLUDE_DIRS}
+     	
 )
 add_executable(lcm_decoder_node src/ros_2_lcm/lcm_decoder_node.cpp)
-target_link_libraries(lcm_decoder_node 
+target_link_libraries(lcm_decoder_node
+     	lcmDecoder 
 		${lcm_libraries}
 		${PROJECT_NAME}
 		${OpenCV_LIBS}

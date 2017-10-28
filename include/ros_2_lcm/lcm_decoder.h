@@ -9,12 +9,14 @@
 #define LCM_DECODER_H_
 
 #include <lcm/lcm-cpp.hpp>
+#include <memory>
+#include <iostream>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
 #include "ros_2_lcm/BinaryBlob.hpp"
 
-//TODO move this as a separate node
+//TODO move this in a separate package
 
 #define DEBUG
 #define VISUALIZATION
@@ -24,12 +26,12 @@ class LcmImageDecoder {
 
 public:
     LcmImageDecoder(const std::string& lcmTopicName) :
-            m_currentIndex(0), m_lcmPtr(new lcm::LCM()) {
+        m_currentIndex(0), m_lcmPtr(new lcm::LCM()) {
 
-        if (m_lcmPtr == false || m_lcmPtr->good() == false)
+        if (m_lcmPtr == NULL || m_lcmPtr->good() == false)
             throw std::runtime_error("Lcm creation failed");
 
-        lcm.subscribe(lcmTopicName, &LcmImageDecoder::handleMessage, this);
+        m_lcmPtr->subscribe(lcmTopicName, &LcmImageDecoder::handleMessage, this);
 
 
 #ifdef VISUALIZATION
