@@ -12,29 +12,12 @@
     <arg     if="$(arg debug)" name="launch_prefix" value="gdb -ex run --args" />
     
     
-    <!-- PUT YOUR CAMERAS HERE, THIS IS AN EXAMPLE FOR TWO DIFFERENT CAMERAS -->
-    
-	<!-- =========================================================== -->
-	<!-- Black and white camera -->
-	<!-- =========================================================== -->
-	<!--
-    <arg name="node_name1" default="BW_camera_node" />
-    <arg name="config_file1" default="$(find pylon_camera)/config/blackNwhite.yaml" />
-    <node name="$(arg node_name1)" pkg="pylon_camera" type="pylon_camera_node" output="screen"
-          respawn="$(arg respawn)" launch-prefix="$(arg launch_prefix)">
-
-        <param name="camera_frame" value="$(arg node_name1)" type="string" />
-        <rosparam command="load" file="$(arg config_file1)" />
-    </node>
--->
-    
     
     
     <!-- =========================================================== -->
     <!-- color camera -->
     <!-- =========================================================== -->
-<!--   
- <arg name="node_name2" default="color_camera_node" />
+    <arg name="node_name2" default="color_camera_node" />
     <arg name="config_file2" default="$(find pylon_camera)/config/color.yaml" />   
 
     <node name="$(arg node_name2)" pkg="pylon_camera" type="pylon_camera_node" output="screen"
@@ -43,7 +26,7 @@
         <param name="camera_frame" value="$(arg node_name2)" type="string" />
         <rosparam command="load" file="$(arg config_file2)" />
     </node>
-    -->
+    
     
     
 </launch>
