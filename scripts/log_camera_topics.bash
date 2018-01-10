@@ -20,6 +20,8 @@ fi
 
 echo "Bags saved in $(pwd)"
 trap - SIGINT #clear trap
+echo "Sleeping for 10s:"
+sleep 10
 }
 
 
