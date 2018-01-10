@@ -20,8 +20,26 @@ fi
 
 echo "Bags saved in $(pwd)"
 trap - SIGINT #clear trap
-echo "Sleeping for 10s:"
-sleep 10
+
+if [ "$1" -gt -1 ]
+then
+	name="color_camera-"$currTime".bag.active"
+	echo "Reindexing color camera bag..."
+	rosbag reindex $name
+	newName="color_camera-"$currTime".bag"
+	mv $name $newName	
+fi
+
+if [ "$2" -gt -1 ]
+then
+	name="BW_camera-"$currTime".bag.active"
+	echo "Reindexing BW camera bag..."
+	rosbag reindex $name
+	newName="BW_camera-"$currTime".bag"
+	mv $name $newName 	
+fi
+
+echo "Done."
 }
 
 
@@ -65,7 +83,7 @@ if [ "$BWcameraFound" = true ]; then
 fi
 
 
-trap 'ctrl_c $colorCameraPID $BWcameraPID' SIGINT
+trap 'ctrl_c $colorCameraPID $BWcameraPID $currTime' SIGINT
 
 
 
