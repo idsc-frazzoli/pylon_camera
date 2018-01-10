@@ -47,7 +47,7 @@ done
 if [ "$colorCameraFound" = true ]; then
 	echo "Found color camera"
 	name="color_camera-"$currTime
-	rosbag record -O $name -b 1024 --duration=5m color_camera_node/image_raw &
+	rosbag record -O $name -b 1024 --duration=1m color_camera_node/image_raw/compressed &
 	colorCameraPID=$!
 	echo "Started recording"
 	echo "Color camera PID is: $colorCameraPID"
@@ -56,7 +56,7 @@ fi
 if [ "$BWcameraFound" = true ]; then
 	echo "Found BW camera"
 	name="BW_camera-"$currTime
-	rosbag record -O $name -b 1024 --duration=5m BW_camera_node/image_raw &
+	rosbag record -O $name -b 1024 --duration=1m BW_camera_node/image_raw/compressed &
 	BWcameraPID=$!
 	echo "Started recording"
 	echo "BW camera PID is: $BWcameraPID"
