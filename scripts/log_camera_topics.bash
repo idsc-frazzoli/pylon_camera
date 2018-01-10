@@ -17,6 +17,9 @@ if [ "$2" -gt -1 ]
 	echo "killing process: $2"
 	kill $2	
 fi
+
+echo "Bags saved in $(pwd)"
+trap - SIGINT #clear trap
 }
 
 
@@ -25,7 +28,7 @@ fi
 topics=$(rostopic list)
 colorCameraFound=false
 BWcameraFound=false
-
+currTime=$(date +%Y-%m-%d-%H-%M-%S)
 for i in $topics
 do
 	if [[ $i == *"BW_camera_node"* ]]; then
@@ -43,7 +46,8 @@ done
 
 if [ "$colorCameraFound" = true ]; then
 	echo "Found color camera"
-	rosbag record color_camera_node/image_raw &
+	name="color_camera-"$currTime
+	rosbag record -O $name -b 1024 --duration=5m color_camera_node/image_raw &
 	colorCameraPID=$!
 	echo "Started recording"
 	echo "Color camera PID is: $colorCameraPID"
@@ -51,7 +55,8 @@ fi
 
 if [ "$BWcameraFound" = true ]; then
 	echo "Found BW camera"
-	rosbag record BW_camera_node/image_raw &
+	name="BW_camera-"$currTime
+	rosbag record -O $name -b 1024 --duration=5m BW_camera_node/image_raw &
 	BWcameraPID=$!
 	echo "Started recording"
 	echo "BW camera PID is: $BWcameraPID"
