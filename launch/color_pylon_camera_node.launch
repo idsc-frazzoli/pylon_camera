@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+
+
+
+<!-- =========================================================== -->
+<!--common args -->
+<!-- =========================================================== -->
+    <arg name="respawn" default="false" />
+    <arg name="debug" default="false" />
+    <arg unless="$(arg debug)" name="launch_prefix" value="" />
+    <arg     if="$(arg debug)" name="launch_prefix" value="gdb -ex run --args" />
+    
+    
+    
+    
+<!-- =========================================================== -->
+<!-- color camera -->
+<!-- =========================================================== -->
+    <arg name="node_name2" default="color_camera_node" />
+    <arg name="config_file2" default="$(find pylon_camera)/config/color.yaml" />   
+
+    <node name="$(arg node_name2)" pkg="pylon_camera" type="pylon_camera_node" output="screen"
+          respawn="$(arg respawn)" launch-prefix="$(arg launch_prefix)">
+
+        <param name="camera_frame" value="$(arg node_name2)" type="string" />
+        <rosparam command="load" file="$(arg config_file2)" />
+    </node>
+    
+    
+    
+</launch>
