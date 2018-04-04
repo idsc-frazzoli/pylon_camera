@@ -2,7 +2,6 @@
 <launch>
 
 
-
 <!-- =========================================================== -->
 <!--common args -->
 <!-- =========================================================== -->
@@ -10,8 +9,6 @@
     <arg name="debug" default="false" />
     <arg unless="$(arg debug)" name="launch_prefix" value="" />
     <arg     if="$(arg debug)" name="launch_prefix" value="gdb -ex run --args" />
-    
-    
     
     
 <!-- =========================================================== -->
@@ -22,7 +19,6 @@
 
     <node name="$(arg node_name2)" pkg="pylon_camera" type="pylon_camera_node" output="screen"
           respawn="$(arg respawn)" launch-prefix="$(arg launch_prefix)">
-
         <param name="camera_frame" value="$(arg node_name2)" type="string" />
         <rosparam command="load" file="$(arg config_file2)" />
     </node>
