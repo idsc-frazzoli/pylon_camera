@@ -31,7 +31,7 @@ image_encoding: "rgb8"
 #  The desired publisher frame rate if listening to the topics.
 #  This paramter can only be set once at startup
 #  Calling the GrabImages-Action can result in a higher framerate
-frame_rate: 10.0
+frame_rate: 30.0
 
 ##########################################################################
 ######################## Image Intensity Settings ########################
@@ -63,7 +63,7 @@ frame_rate: 10.0
 #  try to reach the desired brightness by only varying the exposure time. If
 #  gain AND exposure are given, it is not possible to reach the brightness,
 #  because both are assumed to be fix.
-# brightness: 100
+brightness: 100
 
 #  Only relevant, if 'brightness' is set:
 #  The brightness_continuous flag controls the auto brightness function.
@@ -73,7 +73,7 @@ frame_rate: 10.0
 #  trying to adapt to changing light conditions. This is only possible for
 #  values in the possible auto range of the pylon API which is e.g. [50 - 205]
 #  for acA2500-14um and acA1920-40gm
-# brightness_continuous: true
+brightness_continuous: true
 
 #  Only relevant, if 'brightness' is set:
 #  If the camera should try to reach and / or keep the brightness, hence
@@ -85,8 +85,8 @@ frame_rate: 10.0
 #  reached by adapting the exposure time.
 #  The gain_auto flag indicates, that the desired brightness will be
 #  reached by adapting the gain.
-# exposure_auto: true
-# gain_auto: true
+exposure_auto: true
+gain_auto: true
 
 ##########################################################################
 
@@ -97,7 +97,7 @@ frame_rate: 10.0
 #  The exposure search can be limited with an upper bound. This is to prevent
 #  very high exposure times and resulting timeouts.
 #  A typical value for this upper bound is ~2000000us.
-# auto_exposure_upper_limit: 2000000.0
+auto_exposure_upper_limit: 50000.0
 
 #  The MTU size. Only used for GigE cameras.
 #  To prevent lost frames configure the camera has to be configured
