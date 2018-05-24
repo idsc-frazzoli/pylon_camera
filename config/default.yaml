@@ -29,9 +29,14 @@ camera_info_url: ""
 # binning_y: 1
 
 #  The desired publisher frame rate if listening to the topics.
-#  This paramter can only be set once at startup
+#  This parameter can only be set once at startup
 #  Calling the GrabImages-Action can result in a higher framerate
 frame_rate: 5.0
+
+#  Mode of camera's shutter.
+#  The supported modes are "rolling", "global" and "global_reset"
+#  Default value is "" (empty) means default_shutter_mode
+#shutter_mode: ""
 
 ##########################################################################
 ######################## Image Intensity Settings ########################

@@ -197,9 +197,9 @@ bool PylonCameraNode::startGrabbing()
 
     if ( !camera_info_manager_->setCameraName(pylon_camera_->deviceUserID()) )
     {
-        // valid name contains only alphanumerc signs and '_'
+        // valid name contains only alphanumeric signs and '_'
         ROS_WARN_STREAM("[" << pylon_camera_->deviceUserID()
-                << "] name not valid for camera_info_manger");
+                << "] name not valid for camera_info_manager");
     }
 
     setupSamplingIndices(sampling_indices_,
@@ -409,8 +409,7 @@ void PylonCameraNode::spin()
     }
     // images were published if subscribers are available or if someone calls
     // the GrabImages Action
-    if ( !isSleeping() && ( img_raw_pub_.getNumSubscribers() > 0 ||
-                            getNumSubscribersRect() ) )
+    if ( !isSleeping() && ( getNumSubscribersRaw() || getNumSubscribersRect() ) )
     {
         if ( !grabImage() )
         {
@@ -688,6 +687,13 @@ camera_control_msgs::GrabImagesResult PylonCameraNode::grabImagesRaw(
             action_server->publishFeedback(feedback);
         }
     }
+    if ( camera_info_manager_ )
+    {
+        sensor_msgs::CameraInfoPtr cam_info(
+                                new sensor_msgs::CameraInfo(
+                                    camera_info_manager_->getCameraInfo()));
+        result.cam_info = *cam_info;
+    }
 
     // restore previous settings:
     float reached_val;
@@ -727,6 +733,24 @@ const double& PylonCameraNode::frameRate() const
 const std::string& PylonCameraNode::cameraFrame() const
 {
     return pylon_camera_parameter_set_.cameraFrame();
+}
+
+uint32_t PylonCameraNode::getNumSubscribersRaw() const
+{
+    // The image_transport::CameraPublisher couples the image_raw and the
+    // camera_info object. getNumSubscribers() returns the max number of
+    // subscriptions on the camera_info and the image_raw topic.
+    // Therefore it's not possible to know when a subscription to only the
+    // cam-info is active and no image has to be taken. Workaround:
+    // Forward declaration of the CameraPublisherImpl
+    struct CameraPublisherImpl
+    {
+        image_transport::Publisher image_pub_;
+        ros::Publisher info_pub_;
+        bool unadvertised_;
+    };
+    return img_raw_pub_.getNumSubscribers();
+    // return ((CameraPublisherImpl*)(void*)img_raw_pub_)->image_pub_.getNumSubscribers();
 }
 
 uint32_t PylonCameraNode::getNumSubscribersRect() const

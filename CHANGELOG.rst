@@ -2,6 +2,37 @@
 Changelog for package pylon_camera
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.11.8 (2018-05-16)
+-------------------
+* Last change from Marcel as a member of the Magazino-Team. Bye Bye :-)
+* Bugfix: CameraPublisherImpl leads to crash
+* Added CameraInfo to the GrabImagesResult
+
+0.11.7 (2018-05-16)
+-------------------
+* Revied PR, Moved CameraPublisherImpl struct to method
+* Workaround for overestimated wrong numbers of subscribers on image_raw
+
+0.11.6 (2018-05-15)
+-------------------
+* Added definition in default config and readme description of missed parameter 'shutter_mode'
+* fix typos.
+* Fixed typo in message in method PylonCameraNode::startGrabbing
+* Tried to fix LICENSE-issue
+
+0.11.5 (2018-05-07)
+-------------------
+* Updated license year
+* Issue found -> wrong year -> renamed back
+
+0.11.4 (2018-05-07)
+-------------------
+* Again renamed the LICENSE file
+
+0.11.3 (2018-05-07)
+-------------------
+* Renamed LICENSE.rst
+
 0.11.2 (2018-03-28)
 -------------------
 * Bugfix for useless rectification
